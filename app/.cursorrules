@@ -1,0 +1,25 @@
+# ADWATrial Project Rules
+
+## Core Identity
+- **Name:** ADWATrial (Premium Ethiopian Marketplace)
+- **Aesthetic:** Luxury Black & Gold. 
+- **Palette:** Background: #0A0A0A, Primary Gold: #D4AF37, Text: #F5E6BE, Surface: #1A1A1A.
+- **Tone:** Professional, clean, and high-end (Airbnb/Booking.com level).
+
+## Tech Stack Guidelines
+- **Framework:** Next.js 15+ (App Router).
+- **Styling:** Tailwind CSS v4 (Use @theme variables from globals.css).
+- **Components:** shadcn/ui (Vega/Radix).
+- **Database:** Prisma with PostgreSQL.
+- **Icons:** Lucide React.
+
+## Coding Standards
+- Use **Server Components** by default. Only use 'use client' for interactive elements.
+- Always use **TypeScript** with strict types. No 'any'.
+- Use **Server Actions** for all database mutations.
+- Follow a mobile-first responsive design pattern.
+- All buttons and interactive gold elements should have a subtle hover glow: `shadow-[0_0_15px_rgba(212,175,55,0.3)]`.
+
+## UI/UX Rules
+- Use a **Serif font** (Playfair Display) for large headings and a **Sans font** (Geist) for body text.
+- Navigation must be sticky with a glassmorphism effect (bg-black/80 backdrop-blur).
