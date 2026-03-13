@@ -32,12 +32,42 @@
   --color-border: #1F1F1F;
 }
 
+@layer utilities {
+  .glass {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10;
+  }
+  
+  .glass-gold {
+    @apply bg-adwa-surface/60 backdrop-blur-lg border border-adwa-gold/20;
+  }
+
+  .text-gold-gradient {
+    @apply bg-gradient-to-br from-adwa-gold via-adwa-gold-soft to-adwa-gold-muted bg-clip-text text-transparent;
+  }
+
+  .bg-gold-gradient {
+    @apply bg-gradient-to-br from-adwa-gold via-adwa-gold-soft to-adwa-gold-muted;
+  }
+
+  .glow-gold {
+    @apply shadow-[0_0_20px_rgba(212,175,55,0.15)];
+  }
+}
+
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased selection:bg-adwa-gold selection:text-black;
   }
   
   h1, h2, h3, h4 {
-    @apply font-serif font-bold text-adwa-gold;
+    @apply font-serif font-bold tracking-tight bg-gradient-to-br from-adwa-gold via-adwa-gold-soft to-adwa-gold-muted bg-clip-text text-transparent;
+  }
+
+  h1 {
+    @apply text-4xl sm:text-6xl lg:text-7xl leading-[1.1];
+  }
+
+  h2 {
+    @apply text-3xl sm:text-4xl lg:text-5xl leading-tight;
   }
 }

@@ -24,80 +24,68 @@ export function ListingCard({
   const price = new Intl.NumberFormat("en-US").format(priceEtb)
 
   const content = (
-    <>
-      <div className="relative aspect-[4/3] w-full overflow-hidden">
+    <div className="flex flex-col h-full">
+      <div className="relative aspect-[16/10] w-full overflow-hidden">
         <Image
           src={imageUrl}
           alt={title}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           quality={90}
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
         />
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-40" />
 
-        {isPremium ? (
-          <div
-            className={cn(
-              "absolute left-3 top-3 rounded-full px-3 py-1",
-              "bg-[var(--color-adwa-gold)] text-black",
-              "text-xs font-semibold uppercase tracking-wide",
-              "shadow-[0_0_15px_rgba(212,175,55,0.3)]",
-              "animate-in fade-in zoom-in-95 duration-300"
-            )}
-          >
-            Premium
+        {isPremium && (
+          <div className="absolute left-4 top-4 glass-gold rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-adwa-gold glow-gold">
+            Pinnacle Series
           </div>
-        ) : null}
+        )}
       </div>
 
-      <div className="flex flex-col gap-1 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <p className="min-w-0 font-serif text-sm font-semibold text-foreground sm:text-base">
-            <span className="line-clamp-2">{title}</span>
-          </p>
-          <p className="shrink-0 text-xs text-foreground/70">
-            {rating.toFixed(1)}
-          </p>
+      <div className="flex flex-1 flex-col justify-between p-6">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-adwa-gold">
+              Ethiopia
+            </p>
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-bold text-white">{rating.toFixed(1)}</span>
+              <span className="text-[10px] text-foreground/40">★</span>
+            </div>
+          </div>
+          <h3 className="font-serif text-xl font-bold leading-snug text-white group-hover:text-adwa-gold transition-colors duration-300">
+            {title}
+          </h3>
         </div>
 
-        <div className="flex items-baseline justify-between gap-3">
-          <p className="text-sm font-semibold text-adwa-gold">
-            ETB {price}
-          </p>
-          <p className="text-xs text-foreground/60">per night</p>
+        <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase tracking-wider text-foreground/40">From</span>
+            <span className="text-lg font-bold text-adwa-gold">ETB {price}</span>
+          </div>
+          <div className="h-8 w-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-adwa-gold group-hover:bg-adwa-gold group-hover:text-black transition-all duration-300">
+            <span className="text-xs">→</span>
+          </div>
         </div>
       </div>
-    </>
+    </div>
+  )
+
+  const containerClasses = cn(
+    "group block overflow-hidden rounded-[2rem] border border-white/5 bg-adwa-surface h-full",
+    "shadow-2xl transition-all duration-500 hover:border-adwa-gold/30 hover:shadow-adwa-gold/5",
+    className
   )
 
   if (href) {
     return (
-      <Link
-        href={href}
-        className={cn(
-          "group block overflow-hidden rounded-2xl border border-border bg-[var(--color-adwa-surface)]",
-          "shadow-[0_4px_20px_rgba(0,0,0,0.4)] transition-all duration-500 hover:shadow-[0_8px_30px_rgba(212,175,55,0.15)]",
-          "hover:border-[color:var(--color-adwa-gold-soft)]",
-          className
-        )}
-      >
+      <Link href={href} className={containerClasses}>
         {content}
       </Link>
     )
   }
 
-  return (
-    <div
-      className={cn(
-        "group block overflow-hidden rounded-2xl border border-border bg-[var(--color-adwa-surface)]",
-        "shadow-[0_4px_20px_rgba(0,0,0,0.4)] transition-all duration-500 hover:shadow-[0_8px_30px_rgba(212,175,55,0.15)]",
-        "hover:border-[color:var(--color-adwa-gold-soft)]",
-        className
-      )}
-    >
-      {content}
-    </div>
-  )
+  return <div className={containerClasses}>{content}</div>
 }
