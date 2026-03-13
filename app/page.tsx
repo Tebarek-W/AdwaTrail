@@ -18,7 +18,7 @@ export default function Home() {
           sizes="100vw"
           className="pointer-events-none -z-10 object-contain opacity-60"
         />
-        <div className="relative mx-auto w-full max-w-6xl px-4 pt-10 pb-6 sm:pt-14">
+        <div className="relative mx-auto w-full max-w-6xl px-4 pt-10 pb-10 sm:pt-14">
           <div className="flex flex-col gap-6">
             <Reveal className="flex flex-col gap-3">
               <p className="text-xs font-medium tracking-[0.2em] text-foreground/70">
@@ -36,18 +36,82 @@ export default function Home() {
 
             <Reveal
               delayMs={120}
-              className="flex flex-col gap-3 sm:flex-row sm:items-center"
+              className="space-y-4"
             >
-              <Button asChild className="rounded-full px-5">
-                <Link href="/discover">Explore listings</Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="rounded-full px-5"
+              <form
+                action="/discover"
+                className="grid gap-2 rounded-full border border-border bg-background/85 p-2 text-sm sm:grid-cols-[2fr_2fr_2fr_auto]"
               >
-                <Link href="/list-your-property">List your property</Link>
-              </Button>
+                <div className="flex flex-col rounded-full px-3 py-1.5">
+                  <label className="text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60">
+                    Location
+                  </label>
+                  <input
+                    name="location"
+                    placeholder="Where are you going?"
+                    className="bg-transparent text-foreground outline-none placeholder:text-foreground/50"
+                  />
+                </div>
+                <div className="flex flex-col rounded-full px-3 py-1.5 sm:border-l sm:border-border/70">
+                  <label className="text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60">
+                    Check-in
+                  </label>
+                  <input
+                    type="date"
+                    name="checkIn"
+                    className="bg-transparent text-foreground outline-none [color-scheme:dark]"
+                  />
+                </div>
+                <div className="flex flex-col rounded-full px-3 py-1.5 sm:border-l sm:border-border/70">
+                  <label className="text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/60">
+                    Check-out & guests
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="date"
+                      name="checkOut"
+                      className="bg-transparent text-foreground outline-none [color-scheme:dark]"
+                    />
+                    <input
+                      type="number"
+                      min={1}
+                      name="guests"
+                      placeholder="Guests"
+                      className="w-20 bg-transparent text-foreground outline-none placeholder:text-foreground/50"
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center justify-end">
+                  <Button
+                    type="submit"
+                    className="h-11 rounded-full px-6 hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                  >
+                    Search
+                  </Button>
+                </div>
+              </form>
+
+              <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm">
+                <span className="text-foreground/60">Explore by category:</span>
+                <Link
+                  href="/discover?type=ENTIRE_HOME"
+                  className="rounded-full border border-border px-3 py-1 text-foreground/80 hover:border-[color:var(--color-adwa-gold)] hover:text-foreground"
+                >
+                  Entire Homes
+                </Link>
+                <Link
+                  href="/discover?type=PRIVATE_ROOM"
+                  className="rounded-full border border-border px-3 py-1 text-foreground/80 hover:border-[color:var(--color-adwa-gold)] hover:text-foreground"
+                >
+                  Private Rooms
+                </Link>
+                <Link
+                  href="/discover?type=EXPERIENCE"
+                  className="rounded-full border border-border px-3 py-1 text-foreground/80 hover:border-[color:var(--color-adwa-gold)] hover:text-foreground"
+                >
+                  Experiences
+                </Link>
+              </div>
             </Reveal>
           </div>
         </div>
@@ -75,34 +139,36 @@ export default function Home() {
           </Link>
         </Reveal>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <Reveal delayMs={0}>
-            <ListingCard
-              title="Gheralta, Ethiopia"
-              priceEtb={14500}
-              rating={4.9}
-              imageUrl="/window.svg"
-              href="/listings/gheralta-luxury-stay"
-            />
-          </Reveal>
-          <Reveal delayMs={80}>
-            <ListingCard
-              title="Lalibela, Ethiopia"
-              priceEtb={9800}
-              rating={4.7}
-              imageUrl="/file.svg"
-              href="/listings/lalibela-boutique-hotel"
-            />
-          </Reveal>
-          <Reveal delayMs={160}>
-            <ListingCard
-              title="Simien Mountains, Ethiopia"
-              priceEtb={12100}
-              rating={4.85}
-              imageUrl="/vercel.svg"
-              href="/listings/simien-cultural-expedition"
-            />
-          </Reveal>
+        <div className="-mx-4 mt-2 overflow-x-auto pb-4">
+          <div className="flex gap-5 px-4">
+            <Reveal delayMs={0} className="min-w-[260px] max-w-xs flex-1">
+              <ListingCard
+                title="Gheralta, Ethiopia"
+                priceEtb={14500}
+                rating={4.9}
+                imageUrl="/window.svg"
+                href="/listings/gheralta-luxury-stay"
+              />
+            </Reveal>
+            <Reveal delayMs={80} className="min-w-[260px] max-w-xs flex-1">
+              <ListingCard
+                title="Lalibela, Ethiopia"
+                priceEtb={9800}
+                rating={4.7}
+                imageUrl="/file.svg"
+                href="/listings/lalibela-boutique-hotel"
+              />
+            </Reveal>
+            <Reveal delayMs={160} className="min-w-[260px] max-w-xs flex-1">
+              <ListingCard
+                title="Simien Mountains, Ethiopia"
+                priceEtb={12100}
+                rating={4.85}
+                imageUrl="/vercel.svg"
+                href="/listings/simien-cultural-expedition"
+              />
+            </Reveal>
+          </div>
         </div>
       </section>
 

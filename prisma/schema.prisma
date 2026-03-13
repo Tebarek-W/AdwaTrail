@@ -12,3 +12,85 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum Role {
+  GUEST
+  HOST
+  ADMIN
+}
+
+enum PropertyType {
+  ENTIRE_HOME
+  PRIVATE_ROOM
+  EXPERIENCE
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  image     String?
+  role      Role     @default(GUEST)
+  createdAt DateTime @default(now())
+
+  properties Property[] @relation("HostProperties")
+  bookings   Booking[]  @relation("GuestBookings")
+  reviews    Review[]
+}
+
+model Property {
+  id             String        @id @default(cuid())
+  title          String
+  description    String
+  location       String
+  city           String
+  country        String
+  latitude       Float?
+  longitude      Float?
+  type           PropertyType
+  pricePerNight  Int
+  mainImageUrl   String
+  galleryImages  String[]      @default([])
+  maxGuests      Int           @default(2)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  hostId   String
+  host     User          @relation("HostProperties", fields: [hostId], references: [id])
+  bookings Booking[]
+  reviews  Review[]
+}
+
+model Booking {
+  id         String        @id @default(cuid())
+  checkIn    DateTime
+  checkOut   DateTime
+  totalPrice Int
+  status     BookingStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+
+  propertyId String
+  guestId    String
+
+  property Property @relation(fields: [propertyId], references: [id])
+  guest    User     @relation("GuestBookings", fields: [guestId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+
+  propertyId String
+  guestId    String
+
+  property Property @relation(fields: [propertyId], references: [id])
+  guest    User     @relation(fields: [guestId], references: [id])
+}
