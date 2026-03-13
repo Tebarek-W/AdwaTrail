@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@plugin "tw-animate-css";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -14,19 +14,22 @@
   --font-serif: "Playfair Display", serif; /* Premium Serif for Headings */
 
   /* ADWA LUXURY PALETTE */
-  --color-background: #0A0A0A;    /* Deep Black */
-  --color-foreground: #F5E6BE;    /* Soft Sand Text */
+  --color-background: #080808;    /* Deep Blacker */
+  --color-foreground: #F7EBD3;    /* Creamy Sand Text */
   
-  --color-adwa-gold: #D4AF37;     /* Primary Gold */
-  --color-adwa-gold-hover: #AA8A2E; 
-  --color-adwa-surface: #1A1A1A;  /* Card Background */
+  --color-adwa-gold: #D4AF37;           /* Primary Gold */
+  --color-adwa-gold-soft: #C5A028;      /* Secondary Gold */
+  --color-adwa-gold-muted: #8B6B18;    /* Muted Gold */
+  --color-adwa-gold-hover: #EBC04C; 
+  --color-adwa-surface: #121212;  /* Card Background */
+  --color-adwa-surface-hover: #1A1A1A;
 
   /* Override Shadcn Defaults to match ADWA */
   --color-primary: var(--color-adwa-gold);
-  --color-primary-foreground: #0A0A0A;
+  --color-primary-foreground: #080808;
   
   --color-card: var(--color-adwa-surface);
-  --color-border: #2A2A2A;
+  --color-border: #1F1F1F;
 }
 
 @layer base {

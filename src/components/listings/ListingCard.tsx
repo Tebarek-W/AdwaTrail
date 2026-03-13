@@ -78,8 +78,8 @@ export function ListingCard({
         href={href}
         className={cn(
           "group block overflow-hidden rounded-2xl border border-border bg-[var(--color-adwa-surface)]",
-          "shadow-sm transition-all duration-300 hover:shadow-lg",
-          "hover:border-[color:rgba(212,175,55,0.35)] hover:shadow-[0_0_30px_rgba(212,175,55,0.08)]",
+          "shadow-[0_4px_20px_rgba(0,0,0,0.4)] transition-all duration-500 hover:shadow-[0_8px_30px_rgba(212,175,55,0.15)]",
+          "hover:border-[color:var(--color-adwa-gold-soft)]",
           className
         )}
       >
@@ -92,8 +92,8 @@ export function ListingCard({
     <div
       className={cn(
         "group block overflow-hidden rounded-2xl border border-border bg-[var(--color-adwa-surface)]",
-        "shadow-sm transition-all duration-300 hover:shadow-lg",
-        "hover:border-[color:rgba(212,175,55,0.35)] hover:shadow-[0_0_30px_rgba(212,175,55,0.08)]",
+        "shadow-[0_4px_20px_rgba(0,0,0,0.4)] transition-all duration-500 hover:shadow-[0_8px_30px_rgba(212,175,55,0.15)]",
+        "hover:border-[color:var(--color-adwa-gold-soft)]",
         className
       )}
     >

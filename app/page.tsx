@@ -11,18 +11,18 @@ export default function Home() {
     <main className="min-h-[calc(100vh-56px)] bg-background">
       <section className="relative overflow-hidden">
         <Image
-          src="/brand/adwa-trail-logo.png"
+          src="/images/adwa_trail_logo_1773405947024.png"
           alt="ADWA Trail background"
           fill
           priority
           sizes="100vw"
-          className="pointer-events-none -z-10 object-contain opacity-60"
+          className="pointer-events-none -z-10 object-cover opacity-30 blur-[2px]"
         />
-        <div className="relative mx-auto w-full max-w-6xl px-4 pt-10 pb-10 sm:pt-14">
+        <div className="relative mx-auto w-full max-w-6xl px-4 pt-10 pb-10 sm:pt-20 sm:pb-24">
           <div className="flex flex-col gap-6">
-            <Reveal className="flex flex-col gap-3">
-              <p className="text-xs font-medium tracking-[0.2em] text-foreground/70">
-                ADWATrial · Premium Ethiopian Marketplace
+            <Reveal className="flex flex-col gap-4">
+              <p className="text-xs font-bold tracking-[0.3em] text-adwa-gold">
+                ADWA TRAIL · THE PINNACLE OF ETHIOPIAN DISCOVERY
               </p>
               <h1 className="text-3xl leading-tight sm:text-5xl">
                 Discover luxury stays and cultural expeditions across Ethiopia.
@@ -141,30 +141,30 @@ export default function Home() {
 
         <div className="-mx-4 mt-2 overflow-x-auto pb-4">
           <div className="flex gap-5 px-4">
-            <Reveal delayMs={0} className="min-w-[260px] max-w-xs flex-1">
+            <Reveal delayMs={0} className="min-w-[280px] max-w-sm flex-1">
               <ListingCard
-                title="Gheralta, Ethiopia"
+                title="Gheralta Cliffs Eco-Lodge"
                 priceEtb={14500}
                 rating={4.9}
-                imageUrl="/window.svg"
+                imageUrl="/images/gheralta_luxury_stay_1773406024643.png"
                 href="/listings/gheralta-luxury-stay"
               />
             </Reveal>
-            <Reveal delayMs={80} className="min-w-[260px] max-w-xs flex-1">
+            <Reveal delayMs={100} className="min-w-[280px] max-w-sm flex-1">
               <ListingCard
-                title="Lalibela, Ethiopia"
+                title="Lalibela Boutique Heritage"
                 priceEtb={9800}
                 rating={4.7}
-                imageUrl="/file.svg"
+                imageUrl="/images/lalibela_boutique_hotel_1773406077350.png"
                 href="/listings/lalibela-boutique-hotel"
               />
             </Reveal>
-            <Reveal delayMs={160} className="min-w-[260px] max-w-xs flex-1">
+            <Reveal delayMs={200} className="min-w-[280px] max-w-sm flex-1">
               <ListingCard
-                title="Simien Mountains, Ethiopia"
+                title="Simien Mountains Gold Expedition"
                 priceEtb={12100}
                 rating={4.85}
-                imageUrl="/vercel.svg"
+                imageUrl="/images/simien_cultural_expedition_1773406095779.png"
                 href="/listings/simien-cultural-expedition"
               />
             </Reveal>
