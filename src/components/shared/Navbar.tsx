@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
+import { User as UserIcon, Menu } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -28,47 +29,45 @@ export function Navbar({
             width={160}
             height={50}
             priority
-            className="h-12 w-auto"
+            className="h-10 w-auto"
           />
         </Link>
 
+        {/* CENTER LINKS */}
         <nav className="hidden items-center gap-8 md:flex">
           <Link
             href="/discover"
-            className="text-sm font-medium text-foreground/60 transition hover:text-adwa-gold"
+            className="text-sm font-semibold text-foreground/75 transition hover:text-adwa-gold"
           >
-            Discover
+            Stays
           </Link>
           <Link
-            href="/#services"
-            className="text-sm font-medium text-foreground/60 transition hover:text-adwa-gold"
+            href="/discover?category=cultural"
+            className="text-sm font-semibold text-foreground/75 transition hover:text-adwa-gold"
           >
-            Services
+            Experiences
           </Link>
           <Link
-            href="/#about"
-            className="text-sm font-medium text-foreground/60 transition hover:text-adwa-gold"
+            href="/list-your-property"
+            className="text-sm font-semibold text-foreground/75 transition hover:text-adwa-gold"
           >
-            About
-          </Link>
-          <Link
-            href="/#contact"
-            className="text-sm font-medium text-foreground/60 transition hover:text-adwa-gold"
-          >
-            Contact
+            Host Your Home
           </Link>
         </nav>
 
-        <Button
-          asChild
-          className={cn(
-            "rounded-full px-6 py-5 font-semibold text-sm",
-            "bg-adwa-gold text-white hover:bg-adwa-gold-hover",
-            "shadow-md hover:shadow-lg transition-all duration-300"
-          )}
-        >
-          <Link href={listYourPropertyHref}>List Your Property</Link>
-        </Button>
+        {/* RIGHT SIDE: USER MENU */}
+        <div className="flex items-center gap-4">
+            <Link href="/list-your-property" className="hidden lg:block text-sm font-bold text-foreground hover:bg-adwa-warm p-3 rounded-full transition">
+                Become a Host
+            </Link>
+
+            <Link href="/account" className="flex items-center gap-4 rounded-full border border-border bg-white p-2 pl-4 pr-2 shadow-sm transition hover:shadow-md">
+                <Menu className="size-4 text-muted-foreground" />
+                <div className="size-8 rounded-full bg-adwa-gold text-white flex items-center justify-center font-bold text-xs">
+                    AG
+                </div>
+            </Link>
+        </div>
       </div>
     </header>
   )

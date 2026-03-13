@@ -5,6 +5,7 @@ import type { DiscoveryCategory } from "@/src/components/shared/CategoryBar"
 import { CategoryBarClient } from "./CategoryBarClient"
 import { ListingCard } from "@/src/components/listings/ListingCard"
 import { Reveal } from "@/src/components/shared/Reveal"
+import { MOCK_LISTINGS } from "@/src/lib/mock-data"
 
 type PageProps = {
   searchParams?: Promise<{ category?: string }>
@@ -18,106 +19,70 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
   const sp = (await searchParams) ?? {}
   const category = normalizeCategory(sp.category)
 
-  const listings =
-    category === "luxury"
-      ? [
-          {
-            slug: "gheralta-luxury-stay",
-            title: "Gheralta, Ethiopia",
-            priceEtb: 14500,
-            rating: 4.9,
-            imageUrl: "/window.svg",
-          },
-          {
-            slug: "addis-luxury-suite",
-            title: "Addis Ababa, Ethiopia",
-            priceEtb: 17800,
-            rating: 4.8,
-            imageUrl: "/vercel.svg",
-          },
-          {
-            slug: "bahir-dar-resort",
-            title: "Bahir Dar, Ethiopia",
-            priceEtb: 11200,
-            rating: 4.6,
-            imageUrl: "/file.svg",
-          },
-        ]
-      : [
-          {
-            slug: "simien-cultural-expedition",
-            title: "Simien Mountains, Ethiopia",
-            priceEtb: 12100,
-            rating: 4.85,
-            imageUrl: "/vercel.svg",
-          },
-          {
-            slug: "harar-heritage-walk",
-            title: "Harar, Ethiopia",
-            priceEtb: 6900,
-            rating: 4.7,
-            imageUrl: "/window.svg",
-          },
-          {
-            slug: "axum-ancient-trail",
-            title: "Axum, Ethiopia",
-            priceEtb: 8600,
-            rating: 4.9,
-            imageUrl: "/file.svg",
-          },
-        ]
+  // Filter based on "mock" categories for now
+  const filteredListings = MOCK_LISTINGS.filter(l => {
+      if (category === "luxury") return l.pricePerNight > 10000
+      return l.pricePerNight <= 10000
+  })
 
   return (
-    <main className="min-h-[calc(100vh-56px)] bg-background">
-      <section className="mx-auto w-full max-w-6xl px-4 pt-10 pb-4">
-        <Reveal className="flex flex-col gap-2">
-          <p className="text-xs font-medium tracking-[0.2em] text-foreground/70">
-            DISCOVERY
-          </p>
-          <h1 className="text-2xl sm:text-4xl">
-            {category === "luxury" ? "Luxury Stays" : "Cultural Expeditions"}
-          </h1>
-          <p className="max-w-2xl text-sm text-foreground/75">
-            Browse curated vendors with premium presentation. Switch categories
-            to instantly explore a different side of Ethiopia.
-          </p>
-        </Reveal>
+    <main className="min-h-screen bg-background pb-20">
+      <section className="bg-adwa-warm pt-20 pb-16">
+          <div className="mx-auto w-full max-w-7xl px-4">
+              <Reveal className="flex flex-col gap-4 text-center max-w-3xl mx-auto">
+                <p className="text-xs font-bold tracking-[0.3em] text-adwa-gold uppercase">
+                    Discovery
+                </p>
+                <h1 className="text-4xl sm:text-6xl font-serif">
+                    {category === "luxury" ? "Luxury Stays" : "Cultural Expeditions"}
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                    Meticulously vetted properties offering the highest standards of Ethiopian hospitality.
+                </p>
+              </Reveal>
+          </div>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl px-4">
-        <Reveal delayMs={80}>
-          <CategoryBarClient value={category} />
-        </Reveal>
+      <div className="sticky top-[72px] z-30 bg-white/80 backdrop-blur-md border-b border-border/50">
+          <div className="mx-auto w-full max-w-7xl px-4">
+            <CategoryBarClient value={category} />
+          </div>
+      </div>
+
+      <section className="mx-auto w-full max-w-7xl px-4 py-12">
         <Reveal
-          delayMs={140}
-          className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+          className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
         >
-          <p className="text-sm text-foreground/70">
-            Showing <span className="text-foreground">{listings.length}</span>{" "}
-            results
+          <p className="text-sm font-medium text-muted-foreground">
+            Showing <span className="text-foreground font-bold">{filteredListings.length}</span> luxury curations
           </p>
-          <Button asChild className="rounded-full px-5">
-            <Link href="/list-your-property">Become a vendor</Link>
-          </Button>
+          <div className="flex gap-4">
+              <Button variant="outline" className="rounded-full px-6">Any Price</Button>
+              <Button variant="outline" className="rounded-full px-6">Any Date</Button>
+          </div>
         </Reveal>
-      </section>
 
-      <section className="mx-auto w-full max-w-6xl px-4 pt-6 pb-12">
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {listings.map((l, idx) => (
-            <Reveal key={l.slug} delayMs={idx * 70}>
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredListings.map((l, idx) => (
+            <Reveal key={l.id} delayMs={idx * 100}>
               <ListingCard
                 title={l.title}
-                priceEtb={l.priceEtb}
+                priceEtb={l.pricePerNight}
                 rating={l.rating}
-                imageUrl={l.imageUrl}
+                imageUrl={l.mainImageUrl}
                 href={`/listings/${l.slug}`}
               />
             </Reveal>
           ))}
         </div>
+
+        {filteredListings.length === 0 && (
+            <div className="py-20 text-center space-y-4">
+                <p className="text-lg font-bold">No results found for this category.</p>
+                <Link href="/discover" className="text-adwa-gold underline font-bold">Reset filters</Link>
+            </div>
+        )}
       </section>
     </main>
   )
 }
-
