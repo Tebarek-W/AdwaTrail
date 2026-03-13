@@ -32,41 +32,39 @@ export function ListingCard({
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           quality={90}
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-40" />
-
         {isPremium && (
-          <div className="absolute left-4 top-4 glass-gold rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-adwa-gold glow-gold">
-            Pinnacle Series
+          <div className="absolute left-4 top-4 rounded-full bg-adwa-gold px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white shadow-md">
+            Premium
           </div>
         )}
       </div>
 
-      <div className="flex flex-1 flex-col justify-between p-6">
-        <div className="space-y-2">
+      <div className="flex flex-1 flex-col justify-between p-5">
+        <div className="space-y-1.5">
           <div className="flex items-center justify-between">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-adwa-gold">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-adwa-gold">
               Ethiopia
             </p>
             <div className="flex items-center gap-1">
-              <span className="text-xs font-bold text-white">{rating.toFixed(1)}</span>
-              <span className="text-[10px] text-foreground/40">★</span>
+              <span className="text-xs font-bold text-foreground">{rating.toFixed(1)}</span>
+              <span className="text-xs text-adwa-gold">★</span>
             </div>
           </div>
-          <h3 className="font-serif text-xl font-bold leading-snug text-white group-hover:text-adwa-gold transition-colors duration-300">
+          <h3 className="font-serif text-lg font-bold leading-snug text-foreground group-hover:text-adwa-gold transition-colors duration-300">
             {title}
           </h3>
         </div>
 
-        <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
+        <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-wider text-foreground/40">From</span>
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">From</span>
             <span className="text-lg font-bold text-adwa-gold">ETB {price}</span>
           </div>
-          <div className="h-8 w-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-adwa-gold group-hover:bg-adwa-gold group-hover:text-black transition-all duration-300">
-            <span className="text-xs">→</span>
+          <div className="h-9 w-9 rounded-full border border-border flex items-center justify-center text-muted-foreground group-hover:border-adwa-gold group-hover:bg-adwa-gold group-hover:text-white transition-all duration-300">
+            <span className="text-sm">→</span>
           </div>
         </div>
       </div>
@@ -74,8 +72,8 @@ export function ListingCard({
   )
 
   const containerClasses = cn(
-    "group block overflow-hidden rounded-[2rem] border border-white/5 bg-adwa-surface h-full",
-    "shadow-2xl transition-all duration-500 hover:border-adwa-gold/30 hover:shadow-adwa-gold/5",
+    "group block overflow-hidden rounded-2xl border border-border bg-white h-full",
+    "shadow-sm transition-all duration-500 hover:shadow-xl hover:shadow-adwa-gold/5 hover:border-adwa-gold/20",
     className
   )
 

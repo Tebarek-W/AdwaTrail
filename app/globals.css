@@ -11,56 +11,58 @@
 @theme {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-serif: "Playfair Display", serif; /* Premium Serif for Headings */
+  --font-serif: "Playfair Display", serif;
 
-  /* ADWA LUXURY PALETTE */
-  --color-background: #080808;    /* Deep Blacker */
-  --color-foreground: #F7EBD3;    /* Creamy Sand Text */
-  
-  --color-adwa-gold: #D4AF37;           /* Primary Gold */
-  --color-adwa-gold-soft: #C5A028;      /* Secondary Gold */
-  --color-adwa-gold-muted: #8B6B18;    /* Muted Gold */
-  --color-adwa-gold-hover: #EBC04C; 
-  --color-adwa-surface: #121212;  /* Card Background */
-  --color-adwa-surface-hover: #1A1A1A;
+  /* ADWA BRIGHT & CLEAR PALETTE */
+  --color-background: #FFFFFF;
+  --color-foreground: #1A1A1A;
 
-  /* Override Shadcn Defaults to match ADWA */
+  --color-adwa-gold: #B8860B;
+  --color-adwa-gold-soft: #DAA520;
+  --color-adwa-gold-muted: #CD853F;
+  --color-adwa-gold-hover: #996515;
+  --color-adwa-surface: #FAFAF8;
+  --color-adwa-surface-hover: #F3F1EE;
+  --color-adwa-warm: #FEF9F0;
+
   --color-primary: var(--color-adwa-gold);
-  --color-primary-foreground: #080808;
-  
+  --color-primary-foreground: #FFFFFF;
+
   --color-card: var(--color-adwa-surface);
-  --color-border: #1F1F1F;
+  --color-border: #E8E4DD;
+  --color-muted: #F5F3F0;
+  --color-muted-foreground: #78716C;
 }
 
 @layer utilities {
   .glass {
-    @apply bg-black/40 backdrop-blur-xl border border-white/10;
+    @apply bg-white/70 backdrop-blur-xl border border-black/5 shadow-lg;
   }
-  
+
   .glass-gold {
-    @apply bg-adwa-surface/60 backdrop-blur-lg border border-adwa-gold/20;
+    @apply bg-white/80 backdrop-blur-lg border border-adwa-gold/15 shadow-xl;
   }
 
   .text-gold-gradient {
-    @apply bg-gradient-to-br from-adwa-gold via-adwa-gold-soft to-adwa-gold-muted bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-adwa-gold via-adwa-gold-soft to-adwa-gold-muted bg-clip-text text-transparent;
   }
 
   .bg-gold-gradient {
-    @apply bg-gradient-to-br from-adwa-gold via-adwa-gold-soft to-adwa-gold-muted;
+    @apply bg-gradient-to-r from-adwa-gold via-adwa-gold-soft to-adwa-gold-muted;
   }
 
   .glow-gold {
-    @apply shadow-[0_0_20px_rgba(212,175,55,0.15)];
+    @apply shadow-[0_0_25px_rgba(184,134,11,0.12)];
   }
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased selection:bg-adwa-gold selection:text-black;
+    @apply bg-background text-foreground antialiased selection:bg-adwa-gold/20 selection:text-foreground;
   }
-  
+
   h1, h2, h3, h4 {
-    @apply font-serif font-bold tracking-tight bg-gradient-to-br from-adwa-gold via-adwa-gold-soft to-adwa-gold-muted bg-clip-text text-transparent;
+    @apply font-serif font-bold tracking-tight text-foreground;
   }
 
   h1 {
