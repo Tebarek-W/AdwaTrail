@@ -1,5 +1,4 @@
 import { Reveal } from "@/src/components/shared/Reveal"
-import { Card } from "@/src/components/ui/card"
 import { Calendar, Heart, ShieldCheck, Star } from "lucide-react"
 
 export default function AccountDashboard() {
@@ -7,7 +6,7 @@ export default function AccountDashboard() {
     <div className="space-y-10">
       <Reveal>
         <h2 className="text-3xl font-bold">Welcome back, Traveler</h2>
-        <p className="mt-1 text-muted-foreground">Here's a snapshot of your Adwa Trail activity.</p>
+        <p className="mt-1 text-muted-foreground">Here&apos;s a snapshot of your Adwa Trail activity.</p>
       </Reveal>
 
       {/* QUICK STATS */}

@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Search, MapPin, Calendar, Users, ArrowRight, ShieldCheck, Zap, Globe, Sparkles } from "lucide-react";
+import { ArrowRight, ShieldCheck, Zap, Globe, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { CategoryBar } from "@/src/components/shared/CategoryBar";
 import { ListingCard } from "@/src/components/listings/ListingCard";
 import { Reveal } from "@/src/components/shared/Reveal";
 import { BentoItem } from "@/src/components/shared/BentoItem";
+import { MainSearch } from "@/src/components/home/MainSearch";
 import { Footer } from "@/src/components/shared/Footer";
 
 export default function Home() {
@@ -37,36 +38,8 @@ export default function Home() {
           </Reveal>
 
           {/* SEARCH BAR */}
-          <Reveal delayMs={200} className="mt-14 w-full max-w-4xl">
-            <div className="glass-gold rounded-2xl p-3 shadow-2xl shadow-adwa-gold/5">
-              <form action="/discover" className="grid grid-cols-1 gap-2 sm:grid-cols-[1.5fr_1fr_1fr_auto]">
-                <div className="flex items-center gap-3 rounded-xl bg-white/50 px-5 py-4 transition-all hover:bg-white hover:shadow-sm group">
-                  <MapPin className="size-5 text-adwa-gold" />
-                  <div className="flex flex-col items-start">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-adwa-gold transition-colors">Where</label>
-                    <input name="location" placeholder="Search by city or landmark" className="w-full bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/60" />
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 rounded-xl bg-white/50 px-5 py-4 transition-all hover:bg-white hover:shadow-sm group">
-                  <Calendar className="size-5 text-adwa-gold" />
-                  <div className="flex flex-col items-start">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-adwa-gold transition-colors">When</label>
-                    <input type="text" placeholder="Add dates" className="w-full bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/60" />
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 rounded-xl bg-white/50 px-5 py-4 transition-all hover:bg-white hover:shadow-sm group">
-                  <Users className="size-5 text-adwa-gold" />
-                  <div className="flex flex-col items-start">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-adwa-gold transition-colors">Who</label>
-                    <input type="text" placeholder="Add guests" className="w-full bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/60" />
-                  </div>
-                </div>
-                <Button className="h-full rounded-xl bg-adwa-gold px-10 text-white font-bold hover:bg-adwa-gold-hover transition-all shadow-lg hover:scale-[1.02] active:scale-95 group">
-                  <Search className="mr-2 size-5 transition-transform group-hover:scale-110" />
-                  Search
-                </Button>
-              </form>
-            </div>
+          <Reveal delayMs={200} className="mt-14 w-full">
+            <MainSearch />
           </Reveal>
 
           {/* Quick links */}
