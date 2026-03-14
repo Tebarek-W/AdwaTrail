@@ -6,17 +6,13 @@ import {
   Share,
   Heart,
   ChevronLeft,
-  Users,
-  Bed,
-  Bath,
   CheckCircle2,
-  Calendar,
-  MessageCircle,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Reveal } from "@/src/components/shared/Reveal"
 import { getListingBySlug } from "@/src/lib/mock-data"
+import { cn } from "@/lib/utils"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -192,7 +188,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
                 Reserve
               </Button>
 
-              <p className="mt-4 text-center text-sm text-muted-foreground">You won't be charged yet</p>
+              <p className="mt-4 text-center text-sm text-muted-foreground">You won&apos;t be charged yet</p>
 
               <div className="mt-6 space-y-4 border-t border-border pt-6 text-sm">
                 <div className="flex justify-between">
