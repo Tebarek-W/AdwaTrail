@@ -7,6 +7,7 @@ import { CategoryBar } from "@/src/components/shared/CategoryBar";
 import { ListingCard } from "@/src/components/listings/ListingCard";
 import { Reveal } from "@/src/components/shared/Reveal";
 import { BentoItem } from "@/src/components/shared/BentoItem";
+import { Footer } from "@/src/components/shared/Footer";
 
 export default function Home() {
   return (
@@ -25,7 +26,7 @@ export default function Home() {
             </div>
 
             <h1 className="max-w-4xl font-serif leading-[1.08]">
-              Discover Ethiopia's
+              Discover Ethiopia&apos;s
               <br />
               <span className="text-gold-gradient">finest experiences</span>
             </h1>
@@ -198,7 +199,7 @@ export default function Home() {
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-adwa-gold">About ADWA Trail</p>
               <h2>A premium gateway to Ethiopia</h2>
               <p className="text-lg leading-relaxed text-muted-foreground">
-                ADWA Trail connects global travelers with exceptional Ethiopian stays and cultural expeditions from trusted local vendors. We obsess over presentation, trust, and effortless browsing — so your next trip feels confident from the first click.
+                ADWA Trail connects global travelers with exceptional Ethiopian stays and cultural expeditions from trusted local vendors. We obsess over presentation, trust, and effortless browsing &mdash; so your next trip feels confident from the first click.
               </p>
               <div className="grid grid-cols-3 gap-8 pt-4">
                 <div className="text-center">
@@ -259,27 +260,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ───── FOOTER ───── */}
-      <footer className="border-t border-border bg-adwa-surface py-12">
-        <div className="mx-auto max-w-7xl px-4 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex flex-col items-center md:items-start gap-3">
-            <Image
-              src="/images/adwa-logo-light.png"
-              alt="ADWA Trail"
-              width={120}
-              height={40}
-              className="h-10 w-auto"
-            />
-            <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} ADWA Trail. All rights reserved.</p>
-          </div>
-          <div className="flex gap-8 text-sm font-medium text-muted-foreground">
-            <Link href="/" className="hover:text-adwa-gold transition-colors">Home</Link>
-            <Link href="/discover" className="hover:text-adwa-gold transition-colors">Discover</Link>
-            <Link href="/#services" className="hover:text-adwa-gold transition-colors">Services</Link>
-            <Link href="/#contact" className="hover:text-adwa-gold transition-colors">Contact</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
-  );
+  )
 }

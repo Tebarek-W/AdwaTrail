@@ -36,28 +36,22 @@ export function Navbar({
         {/* CENTER LINKS */}
         <nav className="hidden items-center gap-8 md:flex">
           <Link
-            href="/discover"
+            href="/stays"
             className="text-sm font-semibold text-foreground/75 transition hover:text-adwa-gold"
           >
             Stays
           </Link>
           <Link
-            href="/discover?category=cultural"
+            href="/experiences"
             className="text-sm font-semibold text-foreground/75 transition hover:text-adwa-gold"
           >
             Experiences
           </Link>
           <Link
-            href="/discover?category=services"
+            href="/services"
             className="text-sm font-semibold text-foreground/75 transition hover:text-adwa-gold"
           >
             Services
-          </Link>
-          <Link
-            href="/list-your-property"
-            className="text-sm font-semibold text-foreground/75 transition hover:text-adwa-gold"
-          >
-            Host Your Home
           </Link>
         </nav>
 
