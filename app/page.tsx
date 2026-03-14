@@ -37,31 +37,31 @@ export default function Home() {
 
           {/* SEARCH BAR */}
           <Reveal delayMs={200} className="mt-14 w-full max-w-4xl">
-            <div className="glass-gold rounded-2xl p-3">
+            <div className="glass-gold rounded-2xl p-3 shadow-2xl shadow-adwa-gold/5">
               <form action="/discover" className="grid grid-cols-1 gap-2 sm:grid-cols-[1.5fr_1fr_1fr_auto]">
-                <div className="flex items-center gap-3 rounded-xl bg-adwa-warm px-5 py-3.5 transition-colors hover:bg-adwa-surface-hover">
+                <div className="flex items-center gap-3 rounded-xl bg-white/50 px-5 py-4 transition-all hover:bg-white hover:shadow-sm group">
                   <MapPin className="size-5 text-adwa-gold" />
                   <div className="flex flex-col items-start">
-                    <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Destination</label>
-                    <input name="location" placeholder="Where to?" className="bg-transparent text-sm font-medium text-foreground outline-none placeholder:text-muted-foreground" />
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-adwa-gold transition-colors">Where</label>
+                    <input name="location" placeholder="Search by city or landmark" className="w-full bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/60" />
                   </div>
                 </div>
-                <div className="flex items-center gap-3 rounded-xl bg-adwa-warm px-5 py-3.5 transition-colors hover:bg-adwa-surface-hover">
+                <div className="flex items-center gap-3 rounded-xl bg-white/50 px-5 py-4 transition-all hover:bg-white hover:shadow-sm group">
                   <Calendar className="size-5 text-adwa-gold" />
                   <div className="flex flex-col items-start">
-                    <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Dates</label>
-                    <input type="text" placeholder="Add dates" className="bg-transparent text-sm font-medium text-foreground outline-none placeholder:text-muted-foreground" />
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-adwa-gold transition-colors">When</label>
+                    <input type="text" placeholder="Add dates" className="w-full bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/60" />
                   </div>
                 </div>
-                <div className="flex items-center gap-3 rounded-xl bg-adwa-warm px-5 py-3.5 transition-colors hover:bg-adwa-surface-hover">
+                <div className="flex items-center gap-3 rounded-xl bg-white/50 px-5 py-4 transition-all hover:bg-white hover:shadow-sm group">
                   <Users className="size-5 text-adwa-gold" />
                   <div className="flex flex-col items-start">
-                    <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Guests</label>
-                    <input type="number" placeholder="2 Guests" className="w-20 bg-transparent text-sm font-medium text-foreground outline-none placeholder:text-muted-foreground" />
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-adwa-gold transition-colors">Who</label>
+                    <input type="text" placeholder="Add guests" className="w-full bg-transparent text-sm font-semibold text-foreground outline-none placeholder:text-muted-foreground/60" />
                   </div>
                 </div>
-                <Button className="h-full rounded-xl bg-adwa-gold px-8 text-white font-semibold hover:bg-adwa-gold-hover transition-all shadow-md hover:shadow-lg">
-                  <Search className="mr-2 size-5" />
+                <Button className="h-full rounded-xl bg-adwa-gold px-10 text-white font-bold hover:bg-adwa-gold-hover transition-all shadow-lg hover:scale-[1.02] active:scale-95 group">
+                  <Search className="mr-2 size-5 transition-transform group-hover:scale-110" />
                   Search
                 </Button>
               </form>

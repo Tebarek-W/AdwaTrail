@@ -1,18 +1,15 @@
 import Link from "next/link"
 import Image from "next/image"
-import { User as UserIcon, Menu } from "lucide-react"
+import { Menu } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 type NavbarProps = {
   className?: string
-  listYourPropertyHref?: string
 }
 
 export function Navbar({
   className,
-  listYourPropertyHref = "/list-your-property",
 }: NavbarProps) {
   return (
     <header
@@ -22,15 +19,18 @@ export function Navbar({
       )}
     >
       <div className="relative mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3">
-        <Link href="/" className="inline-flex items-center gap-3">
+        <Link href="/" className="inline-flex items-center gap-2 group">
           <Image
             src="/images/adwa-logo-light.png"
             alt="ADWA Trail"
             width={160}
-            height={50}
+            height={40}
             priority
-            className="h-10 w-auto"
+            className="h-9 w-auto"
           />
+          <span className="text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-adwa-gold">
+            ADWAtrail
+          </span>
         </Link>
 
         {/* CENTER LINKS */}
@@ -46,6 +46,12 @@ export function Navbar({
             className="text-sm font-semibold text-foreground/75 transition hover:text-adwa-gold"
           >
             Experiences
+          </Link>
+          <Link
+            href="/discover?category=services"
+            className="text-sm font-semibold text-foreground/75 transition hover:text-adwa-gold"
+          >
+            Services
           </Link>
           <Link
             href="/list-your-property"
