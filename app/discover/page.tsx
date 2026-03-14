@@ -8,21 +8,37 @@ import { Reveal } from "@/src/components/shared/Reveal"
 import { MOCK_LISTINGS } from "@/src/lib/mock-data"
 
 type PageProps = {
-  searchParams?: Promise<{ category?: string }>
+  searchParams?: Promise<{ category?: string, q?: string, location?: string }>
 }
 
-function normalizeCategory(raw: string | undefined): DiscoveryCategory {
+function normalizeCategory(raw: string | undefined): DiscoveryCategory | null {
+  if (!raw) return null
   return raw === "cultural" ? "cultural" : "luxury"
 }
 
 export default async function DiscoverPage({ searchParams }: PageProps) {
   const sp = (await searchParams) ?? {}
   const category = normalizeCategory(sp.category)
+  const query = (sp.q || sp.location || "").toLowerCase()
 
-  // Filter based on "mock" categories for now
   const filteredListings = MOCK_LISTINGS.filter(l => {
-      if (category === "luxury") return l.pricePerNight > 10000
-      return l.pricePerNight <= 10000
+      // If there's a search query, prioritize it
+      if (query) {
+        const matchesQuery = 
+          l.title.toLowerCase().includes(query) || 
+          l.location.toLowerCase().includes(query) || 
+          l.city.toLowerCase().includes(query)
+        
+        if (!matchesQuery) return false
+      }
+
+      // If category is selected, filter by category
+      if (category) {
+        if (category === "luxury") return l.pricePerNight > 10000
+        if (category === "cultural") return l.type === "EXPERIENCE"
+      }
+
+      return true
   })
 
   return (
@@ -34,10 +50,10 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
                     Discovery
                 </p>
                 <h1 className="text-4xl sm:text-6xl font-serif">
-                    {category === "luxury" ? "Luxury Stays" : "Cultural Expeditions"}
+                    {query ? `Search: ${query}` : (category === "luxury" ? "Luxury Stays" : category === "cultural" ? "Cultural Expeditions" : "Discover Ethiopia")}
                 </h1>
                 <p className="text-lg text-muted-foreground">
-                    Meticulously vetted properties offering the highest standards of Ethiopian hospitality.
+                    {query ? `Showing results for your search across Ethiopia.` : `Meticulously vetted properties offering the highest standards of Ethiopian hospitality.`}
                 </p>
               </Reveal>
           </div>
@@ -54,7 +70,7 @@ export default async function DiscoverPage({ searchParams }: PageProps) {
           className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
         >
           <p className="text-sm font-medium text-muted-foreground">
-            Showing <span className="text-foreground font-bold">{filteredListings.length}</span> luxury curations
+            Showing <span className="text-foreground font-bold">{filteredListings.length}</span> {category === "luxury" ? "luxury " : category === "cultural" ? "cultural " : ""}curations
           </p>
           <div className="flex gap-4">
               <Button variant="outline" className="rounded-full px-6">Any Price</Button>

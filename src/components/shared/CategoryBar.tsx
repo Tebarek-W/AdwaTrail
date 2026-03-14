@@ -9,13 +9,13 @@ export type DiscoveryCategory = "luxury" | "cultural"
 
 type CategoryBarProps = {
   className?: string
-  value?: DiscoveryCategory
+  value?: DiscoveryCategory | null
   onChange?: (value: DiscoveryCategory) => void
 }
 
 export function CategoryBar({ className, value, onChange }: CategoryBarProps) {
-  const [uncontrolled, setUncontrolled] = React.useState<DiscoveryCategory>(
-    value ?? "luxury"
+  const [uncontrolled, setUncontrolled] = React.useState<DiscoveryCategory | null>(
+    value ?? null
   )
 
   const current = value ?? uncontrolled

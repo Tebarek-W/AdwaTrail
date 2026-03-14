@@ -9,7 +9,7 @@ import {
 } from "@/src/components/shared/CategoryBar"
 
 type Props = {
-  value: DiscoveryCategory
+  value: DiscoveryCategory | null
 }
 
 export function CategoryBarClient({ value }: Props) {
@@ -21,6 +21,9 @@ export function CategoryBarClient({ value }: Props) {
     (next: DiscoveryCategory) => {
       const params = new URLSearchParams(searchParams.toString())
       params.set("category", next)
+      // Clear search query when changing categories to avoid mixed results confusion
+      params.delete("q")
+      params.delete("location")
       router.push(`${pathname}?${params.toString()}`)
     },
     [pathname, router, searchParams]
