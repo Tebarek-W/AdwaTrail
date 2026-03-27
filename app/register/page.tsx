@@ -8,6 +8,36 @@ import { Reveal } from "@/src/components/shared/Reveal"
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = React.useState(false)
+  const [name, setName] = React.useState("")
+  const [email, setEmail] = React.useState("")
+  const [password, setPassword] = React.useState("")
+  const [error, setError] = React.useState<string | null>(null)
+  const [loading, setLoading] = React.useState(false)
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password })
+      })
+      const data = await res.json()
+
+      if (res.ok) {
+        window.location.href = "/account"
+      } else {
+        setError(data.error || "Failed to create account")
+      }
+    } catch (err) {
+      setError("An unexpected error occurred")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -49,7 +79,12 @@ export default function RegisterPage() {
           </Reveal>
 
           <Reveal delayMs={100} className="mt-10">
-            <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); window.location.href = '/account' }}>
+            {error && (
+              <div className="mb-6 rounded-xl bg-red-50 p-4 text-sm font-semibold text-red-600 border border-red-200">
+                {error}
+              </div>
+            )}
+            <form className="space-y-5" onSubmit={handleRegister}>
               
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -62,6 +97,8 @@ export default function RegisterPage() {
                   <input
                     type="text"
                     required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="w-full rounded-xl border border-border bg-white py-3.5 pl-11 pr-4 text-sm outline-none transition focus:border-adwa-gold focus:ring-2 focus:ring-adwa-gold/20"
                     placeholder="Abebe Kebede"
                   />
@@ -79,6 +116,8 @@ export default function RegisterPage() {
                   <input
                     type="email"
                     required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full rounded-xl border border-border bg-white py-3.5 pl-11 pr-4 text-sm outline-none transition focus:border-adwa-gold focus:ring-2 focus:ring-adwa-gold/20"
                     placeholder="name@example.com"
                   />
@@ -96,6 +135,9 @@ export default function RegisterPage() {
                   <input
                     type={showPassword ? "text" : "password"}
                     required
+                    minLength={8}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full rounded-xl border border-border bg-white py-3.5 pl-11 pr-11 text-sm outline-none transition focus:border-adwa-gold focus:ring-2 focus:ring-adwa-gold/20"
                     placeholder="••••••••"
                   />
@@ -112,9 +154,10 @@ export default function RegisterPage() {
 
               <button
                 type="submit"
-                className="w-full rounded-xl bg-adwa-gold py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:bg-adwa-gold-hover hover:shadow-xl active:scale-[0.98] mt-2"
+                disabled={loading}
+                className="w-full rounded-xl bg-adwa-gold py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:bg-adwa-gold-hover hover:shadow-xl active:scale-[0.98] mt-2 disabled:opacity-70 disabled:pointer-events-none"
               >
-                Sign up
+                {loading ? "Signing up..." : "Sign up"}
               </button>
             </form>
 

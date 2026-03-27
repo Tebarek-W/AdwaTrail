@@ -10,7 +10,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -37,6 +36,7 @@ model User {
   name      String?
   image     String?
   role      Role     @default(GUEST)
+  password  String?
   createdAt DateTime @default(now())
 
   properties Property[] @relation("HostProperties")

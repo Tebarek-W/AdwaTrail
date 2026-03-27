@@ -8,6 +8,35 @@ import { Reveal } from "@/src/components/shared/Reveal"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = React.useState(false)
+  const [email, setEmail] = React.useState("")
+  const [password, setPassword] = React.useState("")
+  const [error, setError] = React.useState<string | null>(null)
+  const [loading, setLoading] = React.useState(false)
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+      const data = await res.json()
+
+      if (res.ok) {
+        window.location.href = "/account"
+      } else {
+        setError(data.error || "Failed to log in")
+      }
+    } catch (err) {
+      setError("An unexpected error occurred")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="flex min-h-screen bg-white">
@@ -49,7 +78,12 @@ export default function LoginPage() {
           </Reveal>
 
           <Reveal delayMs={100} className="mt-10">
-            <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); window.location.href = '/account' }}>
+            {error && (
+              <div className="mb-6 rounded-xl bg-red-50 p-4 text-sm font-semibold text-red-600 border border-red-200">
+                {error}
+              </div>
+            )}
+            <form className="space-y-6" onSubmit={handleLogin}>
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   Email address
@@ -61,6 +95,8 @@ export default function LoginPage() {
                   <input
                     type="email"
                     required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full rounded-xl border border-border bg-white py-3.5 pl-11 pr-4 text-sm outline-none transition focus:border-adwa-gold focus:ring-2 focus:ring-adwa-gold/20"
                     placeholder="name@example.com"
                   />
@@ -83,6 +119,8 @@ export default function LoginPage() {
                   <input
                     type={showPassword ? "text" : "password"}
                     required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full rounded-xl border border-border bg-white py-3.5 pl-11 pr-11 text-sm outline-none transition focus:border-adwa-gold focus:ring-2 focus:ring-adwa-gold/20"
                     placeholder="••••••••"
                   />
@@ -98,9 +136,10 @@ export default function LoginPage() {
 
               <button
                 type="submit"
-                className="w-full rounded-xl bg-adwa-gold py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:bg-adwa-gold-hover hover:shadow-xl active:scale-[0.98]"
+                disabled={loading}
+                className="w-full rounded-xl bg-adwa-gold py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:bg-adwa-gold-hover hover:shadow-xl active:scale-[0.98] disabled:opacity-70 disabled:pointer-events-none"
               >
-                Log in
+                {loading ? "Logging in..." : "Log in"}
               </button>
             </form>
 
