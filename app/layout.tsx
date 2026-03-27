@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/src/components/shared/Navbar";
+import { getSession } from "@/src/lib/auth";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -21,17 +22,19 @@ export const metadata: Metadata = {
   description: "Premium Ethiopian multi-vendor discovery engine.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
+
   return (
     <html lang="en" className={cn("font-sans", inter.variable)}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
+        <Navbar session={session} />
         {children}
       </body>
     </html>

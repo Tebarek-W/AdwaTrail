@@ -10,10 +10,17 @@ import { cn } from "@/lib/utils"
 
 type NavbarProps = {
   className?: string
+  session?: {
+    id: string
+    name: string | null
+    email: string
+    role: string
+  } | null
 }
 
 export function Navbar({
   className,
+  session
 }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
   const pathname = usePathname()
@@ -81,14 +88,26 @@ export function Navbar({
                 Become a Host
             </Link>
             
-            <Link href="/login" className="hidden md:block text-sm font-bold text-adwa-gold hover:underline p-3">
-                Log in
-            </Link>
+            {!session ? (
+              <Link href="/login" className="hidden md:block text-sm font-bold text-adwa-gold hover:underline p-3">
+                  Log in
+              </Link>
+            ) : (
+              <button 
+                onClick={async () => {
+                  await fetch('/api/auth/logout', { method: 'POST' })
+                  window.location.href = '/'
+                }}
+                className="hidden md:block text-sm font-semibold text-muted-foreground hover:text-foreground hover:underline p-3 transition"
+              >
+                  Log out
+              </button>
+            )}
 
             <Link href="/account" className="flex items-center gap-3 rounded-full border border-border bg-white p-2 pl-3 md:pl-4 pr-2 shadow-sm transition hover:shadow-md">
                 <Menu className="size-4 text-muted-foreground hidden md:block" />
-                <div className="size-7 md:size-8 rounded-full bg-adwa-gold text-white flex items-center justify-center font-bold text-[10px] md:text-xs">
-                    AG
+                <div className="size-7 md:size-8 rounded-full bg-adwa-gold text-white flex items-center justify-center font-bold text-[10px] md:text-xs uppercase">
+                    {session?.name ? session.name.charAt(0) : "AG"}
                 </div>
             </Link>
         </div>
@@ -122,20 +141,34 @@ export function Navbar({
             >
               Become a Host
             </Link>
-            <div className="pt-6 pb-2 flex flex-col gap-3">
-              <Link
-                href="/login"
-                className="w-full text-center rounded-xl border border-border py-3 text-base font-bold text-foreground hover:bg-adwa-warm transition"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/register"
-                className="w-full text-center rounded-xl bg-adwa-gold py-3 text-base font-bold text-white shadow-md hover:bg-adwa-gold-hover transition"
-              >
-                Sign up
-              </Link>
-            </div>
+            {!session ? (
+              <div className="pt-6 pb-2 flex flex-col gap-3">
+                <Link
+                  href="/login"
+                  className="w-full text-center rounded-xl border border-border py-3 text-base font-bold text-foreground hover:bg-adwa-warm transition"
+                >
+                  Log in
+                </Link>
+                <Link
+                  href="/register"
+                  className="w-full text-center rounded-xl bg-adwa-gold py-3 text-base font-bold text-white shadow-md hover:bg-adwa-gold-hover transition"
+                >
+                  Sign up
+                </Link>
+              </div>
+            ) : (
+              <div className="pt-6 pb-2 flex flex-col gap-3">
+                <button
+                  onClick={async () => {
+                    await fetch('/api/auth/logout', { method: 'POST' })
+                    window.location.href = '/'
+                  }}
+                  className="w-full text-center rounded-xl border border-red-200 bg-red-50 text-red-600 py-3 text-base font-bold hover:bg-red-100 transition"
+                >
+                  Log out
+                </button>
+              </div>
+            )}
           </nav>
         </div>
       )}
