@@ -80,6 +80,10 @@ export function Navbar({
             <Link href="/list-your-property" className="hidden lg:block text-sm font-bold text-foreground hover:bg-adwa-warm p-3 rounded-full transition">
                 Become a Host
             </Link>
+            
+            <Link href="/login" className="hidden md:block text-sm font-bold text-adwa-gold hover:underline p-3">
+                Log in
+            </Link>
 
             <Link href="/account" className="flex items-center gap-3 rounded-full border border-border bg-white p-2 pl-3 md:pl-4 pr-2 shadow-sm transition hover:shadow-md">
                 <Menu className="size-4 text-muted-foreground hidden md:block" />
@@ -114,10 +118,24 @@ export function Navbar({
             </Link>
             <Link
               href="/list-your-property"
-              className="py-4 text-base font-bold text-adwa-gold"
+              className="py-4 border-b border-border/50 text-base font-semibold text-foreground/90 hover:text-adwa-gold"
             >
               Become a Host
             </Link>
+            <div className="pt-6 pb-2 flex flex-col gap-3">
+              <Link
+                href="/login"
+                className="w-full text-center rounded-xl border border-border py-3 text-base font-bold text-foreground hover:bg-adwa-warm transition"
+              >
+                Log in
+              </Link>
+              <Link
+                href="/register"
+                className="w-full text-center rounded-xl bg-adwa-gold py-3 text-base font-bold text-white shadow-md hover:bg-adwa-gold-hover transition"
+              >
+                Sign up
+              </Link>
+            </div>
           </nav>
         </div>
       )}
