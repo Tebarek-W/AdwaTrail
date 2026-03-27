@@ -11,8 +11,10 @@ import {
 
 import { Button } from "@/components/ui/button"
 import { Reveal } from "@/src/components/shared/Reveal"
-import { getListingBySlug } from "@/src/lib/mock-data"
+import prisma from "@/src/lib/db"
 import { cn } from "@/lib/utils"
+import { notFound } from "next/navigation"
+import { BookingWidget } from "@/src/components/listings/BookingWidget"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -20,7 +22,22 @@ type PageProps = {
 
 export default async function ListingDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const listing = getListingBySlug(slug)
+  
+  const listing = await prisma.property.findFirst({
+    where: { id: slug }, // Using slug as ID as per our seed/API convention
+    include: {
+      host: true,
+      reviews: {
+        include: {
+          guest: true,
+        }
+      }
+    }
+  })
+
+  if (!listing) {
+    notFound();
+  }
 
   return (
     <main className="min-h-screen bg-background pb-20">
@@ -98,22 +115,22 @@ export default async function ListingDetailPage({ params }: PageProps) {
           <div className="space-y-12">
             <Reveal className="space-y-2 border-b border-border pb-10">
               <h2 className="text-2xl font-bold">
-                {listing.type === "ENTIRE_HOME" ? "Entire home" : "Private room"} hosted by {listing.host.name}
+                {listing.type === "ENTIRE_HOME" ? "Entire home" : "Private room"} hosted by {listing.host.name || "Host"}
               </h2>
               <p className="font-medium text-muted-foreground">
-                {listing.maxGuests} guests · {listing.bedrooms} bedrooms · {listing.beds} beds · {listing.bathrooms} baths
+                {listing.maxGuests} guests · {(listing as any).bedrooms || 1} bedrooms · {(listing as any).beds || 1} beds · {(listing as any).bathrooms || 1} bathrooms
               </p>
             </Reveal>
 
             {/* HOST PREVIEW */}
             <Reveal delayMs={150} className="flex items-start gap-4 border-b border-border pb-10">
               <div className="relative size-14 shrink-0 overflow-hidden rounded-full">
-                <Image src={listing.host.image} alt={listing.host.name} fill className="object-cover" />
+                {listing.host.image && <Image src={listing.host.image} alt={listing.host.name || "Host"} fill className="object-cover" />}
               </div>
               <div>
                 <h3 className="text-lg font-bold">Meet your Host</h3>
-                <p className="text-sm text-muted-foreground">Host for {listing.host.joinDate}</p>
-                {listing.host.isSuperhost && (
+                <p className="text-sm text-muted-foreground">Host for 2 years</p>
+                {(listing.host as any).isSuperhost && (
                   <div className="mt-2 flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-adwa-gold">
                     <CheckCircle2 className="size-3.5" /> superhost
                   </div>
@@ -133,82 +150,31 @@ export default async function ListingDetailPage({ params }: PageProps) {
             <Reveal delayMs={250} className="border-b border-border pb-10">
               <h3 className="text-xl font-bold mb-6">What this place offers</h3>
               <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2">
-                {listing.amenities.map((amenity) => (
-                  <div key={amenity.id} className="flex items-center gap-4 text-foreground/80">
+                {((listing as any).amenities as any[] || []).map((amenity: any, idx: number) => (
+                  <div key={idx} className="flex items-center gap-4 text-foreground/80">
                     <div className="flex size-8 items-center justify-center rounded-lg bg-adwa-warm text-adwa-gold">
-                      <CheckCircle2 className="size-4" /> {/* Simple check for now */}
+                      <CheckCircle2 className="size-4" />
                     </div>
                     <span className="font-medium">{amenity.name}</span>
                   </div>
                 ))}
               </div>
               <Button variant="outline" className="mt-8 rounded-xl px-6 py-5 font-bold">
-                Show all {listing.amenities.length} amenities
+                Show all {((listing as any).amenities as any[] || []).length} amenities
               </Button>
             </Reveal>
           </div>
 
           {/* RIGHT COLUMN: STICKY BOOKING WIDGET */}
           <div className="relative">
-            <Reveal
-              delayMs={300}
-              className="sticky top-28 overflow-hidden rounded-3xl border border-border bg-white p-8 shadow-2xl shadow-adwa-gold/5"
-            >
-              <div className="flex items-end justify-between">
-                <div>
-                  <span className="text-2xl font-bold">ETB {listing.pricePerNight.toLocaleString()}</span>
-                  <span className="text-muted-foreground leading-loose ml-1">night</span>
-                </div>
-                <div className="flex items-center gap-1 text-sm font-semibold">
-                  <Star className="size-3.5 fill-adwa-gold text-adwa-gold" />
-                  <span>{listing.rating}</span>
-                  <span className="text-muted-foreground">· {listing.reviewCount} reviews</span>
-                </div>
+              <div className="sticky top-28 overflow-hidden rounded-3xl border border-border bg-white p-8 shadow-2xl shadow-adwa-gold/5">
+                <BookingWidget 
+                  propertyId={listing.id}
+                  pricePerNight={listing.pricePerNight}
+                  rating={listing.reviews.length > 0 ? listing.reviews.reduce((acc, r) => acc + r.rating, 0) / listing.reviews.length : 4.5}
+                  reviewCount={listing.reviews.length}
+                />
               </div>
-
-              {/* DATE/GUEST PICKER BOX */}
-              <div className="mt-6 overflow-hidden rounded-xl border border-border">
-                <div className="grid grid-cols-2">
-                  <div className="border-r border-b border-border p-3 transition-colors hover:bg-adwa-warm">
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-foreground">Check-in</label>
-                    <span className="text-sm font-medium text-muted-foreground">Add date</span>
-                  </div>
-                  <div className="border-b border-border p-3 transition-colors hover:bg-adwa-warm">
-                    <label className="block text-[10px] font-bold uppercase tracking-wider text-foreground">Checkout</label>
-                    <span className="text-sm font-medium text-muted-foreground">Add date</span>
-                  </div>
-                </div>
-                <div className="p-3 transition-colors hover:bg-adwa-warm">
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-foreground">Guests</label>
-                  <span className="text-sm font-medium text-foreground">1 guest</span>
-                </div>
-              </div>
-
-              <Button className="mt-6 w-full rounded-xl bg-adwa-gold py-7 text-lg font-bold text-white shadow-lg hover:bg-adwa-gold-hover hover:shadow-adwa-gold/20 transition-all duration-300">
-                Reserve
-              </Button>
-
-              <p className="mt-4 text-center text-sm text-muted-foreground">You won&apos;t be charged yet</p>
-
-              <div className="mt-6 space-y-4 border-t border-border pt-6 text-sm">
-                <div className="flex justify-between">
-                  <span className="underline">ETB {listing.pricePerNight.toLocaleString()} x 5 nights</span>
-                  <span>ETB {(listing.pricePerNight * 5).toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="underline">Cleaning fee</span>
-                  <span>ETB 1,200</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="underline">Adwa Trail service fee</span>
-                  <span>ETB 2,500</span>
-                </div>
-                <div className="flex justify-between border-t border-border pt-4 text-lg font-bold">
-                  <span>Total</span>
-                  <span>ETB {(listing.pricePerNight * 5 + 3700).toLocaleString()}</span>
-                </div>
-              </div>
-            </Reveal>
           </div>
         </div>
 
@@ -226,11 +192,11 @@ export default async function ListingDetailPage({ params }: PageProps) {
               <div key={review.id} className="space-y-4">
                 <div className="flex items-center gap-3">
                   <div className="relative size-12 overflow-hidden rounded-full">
-                    <Image src={review.author.image} alt={review.author.name} fill />
+                    {review.guest.image && <Image src={review.guest.image} alt={review.guest.name || "Guest"} fill />}
                   </div>
                   <div>
-                    <h4 className="font-bold">{review.author.name}</h4>
-                    <p className="text-xs text-muted-foreground">{review.createdAt}</p>
+                    <h4 className="font-bold">{review.guest.name || "Guest"}</h4>
+                    <p className="text-xs text-muted-foreground">{review.createdAt.toLocaleDateString()}</p>
                   </div>
                 </div>
                 <div className="flex gap-0.5">
@@ -243,7 +209,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
             ))}
           </div>
           <Button variant="outline" className="mt-12 rounded-xl px-8 py-6 font-bold shadow-sm">
-            Show all {listing.reviewCount} reviews
+            Show all {listing.reviews.length} reviews
           </Button>
         </Reveal>
       </div>

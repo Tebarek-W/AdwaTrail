@@ -5,7 +5,8 @@ import type { DiscoveryCategory } from "@/src/components/shared/CategoryBar"
 import { CategoryBarClient } from "./CategoryBarClient"
 import { ListingCard } from "@/src/components/listings/ListingCard"
 import { Reveal } from "@/src/components/shared/Reveal"
-import { MOCK_LISTINGS } from "@/src/lib/mock-data"
+import prisma from "@/src/lib/db"
+import { PropertyType } from "@prisma/client"
 
 type PageProps = {
   searchParams?: Promise<{ category?: string, q?: string, location?: string }>
@@ -19,27 +20,37 @@ function normalizeCategory(raw: string | undefined): DiscoveryCategory | null {
 export default async function DiscoverPage({ searchParams }: PageProps) {
   const sp = (await searchParams) ?? {}
   const category = normalizeCategory(sp.category)
-  const query = (sp.q || sp.location || "").toLowerCase()
+  const query = (sp.q || sp.location || "")
 
-  const filteredListings = MOCK_LISTINGS.filter(l => {
-      // If there's a search query, prioritize it
-      if (query) {
-        const matchesQuery = 
-          l.title.toLowerCase().includes(query) || 
-          l.location.toLowerCase().includes(query) || 
-          l.city.toLowerCase().includes(query)
-        
-        if (!matchesQuery) return false
-      }
+  const listings = await prisma.property.findMany({
+    where: {
+      ...(query && {
+        OR: [
+          { title: { contains: query, mode: "insensitive" } },
+          { location: { contains: query, mode: "insensitive" } },
+          { city: { contains: query, mode: "insensitive" } },
+        ],
+      }),
+      ...(category === "luxury" && { pricePerNight: { gt: 10000 } }),
+      ...(category === "cultural" && { type: PropertyType.EXPERIENCE }),
+    },
+    include: {
+      reviews: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
 
-      // If category is selected, filter by category
-      if (category) {
-        if (category === "luxury") return l.pricePerNight > 10000
-        if (category === "cultural") return l.type === "EXPERIENCE"
-      }
-
-      return true
-  })
+  const filteredListings = listings.map(l => {
+    const avgRating = l.reviews.length > 0 
+      ? l.reviews.reduce((acc, r) => acc + r.rating, 0) / l.reviews.length 
+      : 4.5; // Default rating if no reviews
+    
+    return {
+      ...l,
+      rating: avgRating,
+      slug: l.id,
+    }
+  });
 
   return (
     <main className="min-h-screen bg-background pb-20">

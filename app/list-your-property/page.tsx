@@ -18,6 +18,18 @@ const STEPS = [
 
 export default function ListYourPropertyPage() {
   const [currentStep, setCurrentStep] = useState(0)
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    type: "ENTIRE_HOME",
+    location: "Addis Ababa, Ethiopia",
+    city: "Addis Ababa",
+    country: "Ethiopia",
+    pricePerNight: 8500,
+    maxGuests: 2,
+    mainImageUrl: "/images/gheralta_luxury_stay_1773406024643.png", // Default for demo
+  })
+  const [loading, setLoading] = useState(false)
 
   const handleNext = () => {
     if (currentStep < STEPS.length - 1) setCurrentStep(currentStep + 1)
@@ -25,6 +37,32 @@ export default function ListYourPropertyPage() {
 
   const handleBack = () => {
     if (currentStep > 0) setCurrentStep(currentStep - 1)
+  }
+
+  const handlePublish = async () => {
+    setLoading(true)
+    try {
+      const response = await fetch("/api/listings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+           ...formData,
+           title: formData.title || `${formData.type} in ${formData.city}`,
+           description: formData.description || "A wonderful place to stay in Ethiopia."
+        }),
+      })
+
+      if (response.ok) {
+        window.location.href = "/discover"
+      } else {
+        alert("Failed to publish listing.")
+      }
+    } catch (error) {
+      console.error("Publish error:", error)
+      alert("An error occurred.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -71,9 +109,23 @@ export default function ListYourPropertyPage() {
                  <p className="text-muted-foreground">Choose the category that best describes your property.</p>
                </div>
                <div className="grid gap-4 sm:grid-cols-3">
-                 {["Eco-Lodge", "Boutique Hotel", "Heritage Home", "Luxury Suite", "Countryside Retreat", "City Apartment"].map((type) => (
-                    <button key={type} className="rounded-2xl border-2 border-border p-6 text-left transition hover:border-adwa-gold hover:bg-adwa-gold/5 focus:border-adwa-gold focus:bg-adwa-gold/5">
-                        <p className="font-bold">{type}</p>
+                 {[
+                   { label: "Eco-Lodge", value: "ENTIRE_HOME" },
+                   { label: "Boutique Hotel", value: "PRIVATE_ROOM" },
+                   { label: "Heritage Home", value: "ENTIRE_HOME" },
+                   { label: "Luxury Suite", value: "PRIVATE_ROOM" },
+                   { label: "Countryside Retreat", value: "ENTIRE_HOME" },
+                   { label: "City Apartment", value: "ENTIRE_HOME" }
+                 ].map((type) => (
+                    <button 
+                      key={type.label} 
+                      onClick={() => setFormData({ ...formData, type: type.value, title: `${type.label} Stay` })}
+                      className={cn(
+                        "rounded-2xl border-2 p-6 text-left transition hover:border-adwa-gold hover:bg-adwa-gold/5 focus:border-adwa-gold focus:bg-adwa-gold/5",
+                        formData.title.includes(type.label) ? "border-adwa-gold bg-adwa-gold/5" : "border-border"
+                      )}
+                    >
+                        <p className="font-bold">{type.label}</p>
                     </button>
                  ))}
                </div>
@@ -109,7 +161,7 @@ export default function ListYourPropertyPage() {
              <Reveal className="space-y-8">
                <div className="space-y-2 text-center">
                  <h2 className="text-4xl font-bold">Add some photos of your place</h2>
-                 <p className="text-muted-foreground">You'll need at least 5 photos to get started. You can add more later.</p>
+                 <p className="text-muted-foreground">You&apos;ll need at least 5 photos to get started. You can add more later.</p>
                </div>
                <div className="flex h-80 flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border bg-adwa-warm/10 text-center">
                  <ImageIcon className="mb-4 size-16 text-muted-foreground" />
@@ -127,10 +179,17 @@ export default function ListYourPropertyPage() {
                  <p className="text-muted-foreground">You can change it anytime. Start competitive to get bookings faster.</p>
                </div>
                <div className="mx-auto flex max-w-md flex-col items-center space-y-4 rounded-3xl border border-border bg-white p-12 text-center shadow-2xl shadow-adwa-gold/5">
-                 <p className="text-6xl font-bold text-adwa-gold">ETB <input type="number" defaultValue={8500} className="w-48 bg-transparent outline-none" /></p>
+                 <p className="text-6xl font-bold text-adwa-gold">ETB 
+                   <input 
+                    type="number" 
+                    value={formData.pricePerNight} 
+                    onChange={(e) => setFormData({ ...formData, pricePerNight: parseInt(e.target.value) || 0 })}
+                    className="w-48 bg-transparent outline-none ml-2" 
+                   />
+                 </p>
                  <p className="font-bold">per night</p>
                  <div className="mt-6 w-full rounded-xl bg-adwa-warm p-4 text-sm text-muted-foreground">
-                    Guest price (including fees): <span className="font-bold text-foreground">ETB 9,800</span>
+                    Guest price (including fees): <span className="font-bold text-foreground">ETB {(formData.pricePerNight * 1.15).toLocaleString()}</span>
                  </div>
                </div>
              </Reveal>
@@ -145,16 +204,16 @@ export default function ListYourPropertyPage() {
                </div>
                <div className="rounded-3xl border border-border bg-white p-10 shadow-sm text-left max-w-2xl mx-auto space-y-4">
                   <div className="flex justify-between items-center border-b border-border pb-4">
-                      <p className="font-bold">Property Type</p>
-                      <p className="text-muted-foreground">Eco-Lodge</p>
+                      <p className="font-bold">Property Title</p>
+                      <p className="text-muted-foreground">{formData.title}</p>
                   </div>
                   <div className="flex justify-between items-center border-b border-border pb-4">
                       <p className="font-bold">Location</p>
-                      <p className="text-muted-foreground">Addis Ababa, Ethiopia</p>
+                      <p className="text-muted-foreground">{formData.city}, Ethiopia</p>
                   </div>
                    <div className="flex justify-between items-center border-b border-border pb-4">
                       <p className="font-bold">Price</p>
-                      <p className="text-adwa-gold font-bold">ETB 8,500 / night</p>
+                      <p className="text-adwa-gold font-bold">ETB {formData.pricePerNight.toLocaleString()} / night</p>
                   </div>
                </div>
                <p className="text-xs text-muted-foreground">By submitting, you agree to the Adwa Trail Hosting Terms of Service.</p>
@@ -167,19 +226,24 @@ export default function ListYourPropertyPage() {
           <Button
             variant="ghost"
             onClick={handleBack}
-            disabled={currentStep === 0}
+            disabled={currentStep === 0 || loading}
             className="flex items-center gap-2 font-bold px-8 py-6 rounded-xl hover:bg-adwa-warm/50"
           >
             <ChevronLeft className="size-5" /> Back
           </Button>
 
           {currentStep === STEPS.length - 1 ? (
-             <Button className="rounded-xl bg-adwa-gold px-12 py-6 text-lg font-bold text-white shadow-xl hover:scale-105 active:scale-95 transition-all">
-               Publish Listing
+             <Button 
+               onClick={handlePublish}
+               disabled={loading}
+               className="rounded-xl bg-adwa-gold px-12 py-6 text-lg font-bold text-white shadow-xl hover:scale-105 active:scale-95 transition-all"
+             >
+               {loading ? "Publishing..." : "Publish Listing"}
              </Button>
           ) : (
             <Button
               onClick={handleNext}
+              disabled={loading}
               className="flex items-center gap-2 rounded-xl bg-adwa-gold px-12 py-6 text-lg font-bold text-white shadow-xl hover:scale-105 active:scale-95 transition-all"
             >
               Next <ChevronRight className="size-5" />

@@ -57,6 +57,10 @@ model Property {
   mainImageUrl   String
   galleryImages  String[]      @default([])
   maxGuests      Int           @default(2)
+  bedrooms       Int           @default(1)
+  beds           Int           @default(1)
+  bathrooms      Int           @default(1)
+  amenities      Json          @default("[]")
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
