@@ -51,6 +51,26 @@ export async function POST(request: Request) {
       hostId, // For now, we'll expect this from the body or use a default
     } = body;
 
+    let validHostId = hostId;
+    if (!validHostId) {
+      // Find default host created by seed
+      let defaultHost = await prisma.user.findUnique({
+        where: { email: "aman@adwatrail.com" }
+      });
+      
+      // If not exists, create it just in case
+      if (!defaultHost) {
+        defaultHost = await prisma.user.create({
+          data: {
+            email: "aman@adwatrail.com",
+            name: "Aman Gebru",
+            role: "HOST",
+          }
+        });
+      }
+      validHostId = defaultHost.id;
+    }
+
     const property = await prisma.property.create({
       data: {
         title,
@@ -63,7 +83,7 @@ export async function POST(request: Request) {
         mainImageUrl,
         galleryImages: galleryImages || [],
         maxGuests: parseInt(maxGuests),
-        hostId: hostId || "aman-host-id", // Fallback for demo
+        hostId: validHostId,
       },
     });
 
