@@ -16,6 +16,10 @@ import { cn } from "@/lib/utils"
 import { notFound } from "next/navigation"
 import { BookingWidget } from "@/src/components/listings/BookingWidget"
 
+interface Amenity {
+  name: string;
+}
+
 type PageProps = {
   params: Promise<{ slug: string }>
 }
@@ -38,6 +42,12 @@ export default async function ListingDetailPage({ params }: PageProps) {
   if (!listing) {
     notFound();
   }
+
+  const reviewCount = listing.reviews.length;
+  const calculatedRating = reviewCount > 0 
+    ? listing.reviews.reduce((acc, review) => acc + review.rating, 0) / reviewCount
+    : 4.5;
+  const displayRating = calculatedRating.toFixed(1);
 
   return (
     <main className="min-h-screen bg-background pb-20">
@@ -70,8 +80,8 @@ export default async function ListingDetailPage({ params }: PageProps) {
           <div className="flex flex-wrap items-center gap-4 text-sm font-medium">
             <div className="flex items-center gap-1">
               <Star className="size-4 fill-adwa-gold text-adwa-gold" />
-              <span>{listing.rating}</span>
-              <span className="text-muted-foreground underline">({listing.reviewCount} reviews)</span>
+              <span>{displayRating}</span>
+              <span className="text-muted-foreground underline">({reviewCount} reviews)</span>
             </div>
             <div className="flex items-center gap-1 text-muted-foreground">
               <MapPin className="size-4" />
@@ -118,7 +128,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
                 {listing.type === "ENTIRE_HOME" ? "Entire home" : "Private room"} hosted by {listing.host.name || "Host"}
               </h2>
               <p className="font-medium text-muted-foreground">
-                {listing.maxGuests} guests · {(listing as any).bedrooms || 1} bedrooms · {(listing as any).beds || 1} beds · {(listing as any).bathrooms || 1} bathrooms
+                {listing.maxGuests} guests · {listing.bedrooms} bedrooms · {listing.beds} beds · {listing.bathrooms} bathrooms
               </p>
             </Reveal>
 
@@ -130,7 +140,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
               <div>
                 <h3 className="text-lg font-bold">Meet your Host</h3>
                 <p className="text-sm text-muted-foreground">Host for 2 years</p>
-                {(listing.host as any).isSuperhost && (
+                {listing.host.isSuperhost && (
                   <div className="mt-2 flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-adwa-gold">
                     <CheckCircle2 className="size-3.5" /> superhost
                   </div>
@@ -150,7 +160,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
             <Reveal delayMs={250} className="border-b border-border pb-10">
               <h3 className="text-xl font-bold mb-6">What this place offers</h3>
               <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2">
-                {((listing as any).amenities as any[] || []).map((amenity: any, idx: number) => (
+                {((listing.amenities as unknown as Amenity[]) || []).map((amenity, idx) => (
                   <div key={idx} className="flex items-center gap-4 text-foreground/80">
                     <div className="flex size-8 items-center justify-center rounded-lg bg-adwa-warm text-adwa-gold">
                       <CheckCircle2 className="size-4" />
@@ -160,7 +170,7 @@ export default async function ListingDetailPage({ params }: PageProps) {
                 ))}
               </div>
               <Button variant="outline" className="mt-8 rounded-xl px-6 py-5 font-bold">
-                Show all {((listing as any).amenities as any[] || []).length} amenities
+                Show all {((listing.amenities as unknown as Amenity[]) || []).length} amenities
               </Button>
             </Reveal>
           </div>
@@ -171,8 +181,8 @@ export default async function ListingDetailPage({ params }: PageProps) {
                 <BookingWidget 
                   propertyId={listing.id}
                   pricePerNight={listing.pricePerNight}
-                  rating={listing.reviews.length > 0 ? listing.reviews.reduce((acc, r) => acc + r.rating, 0) / listing.reviews.length : 4.5}
-                  reviewCount={listing.reviews.length}
+                  rating={calculatedRating}
+                  reviewCount={reviewCount}
                 />
               </div>
           </div>
@@ -182,9 +192,9 @@ export default async function ListingDetailPage({ params }: PageProps) {
         <Reveal delayMs={400} className="mt-20 border-t border-border pt-16">
           <div className="mb-10 flex items-center gap-2 text-2xl font-bold">
             <Star className="size-6 fill-adwa-gold text-adwa-gold" />
-            <span>{listing.rating}</span>
+            <span>{displayRating}</span>
             <span className="text-foreground/30">·</span>
-            <span>{listing.reviewCount} reviews</span>
+            <span>{reviewCount} reviews</span>
           </div>
 
           <div className="grid grid-cols-1 gap-12 sm:grid-cols-2">
